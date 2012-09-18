@@ -15,6 +15,7 @@ module Guard
 
     DEFAULT_OPTIONS = {
       :all_on_start => true,
+      :all_after_passed => false,
       :run_before => false,
       :valid_extensions => DEFAULT_EXTENSIONS
     }
@@ -73,9 +74,17 @@ module Guard
       else
         UI.info(SOME_SPECS_MESSAGE % paths.join(' '))
       end
+
       failed_files = Runner.run(paths, @filtered_options)
-      @files_to_rerun = failed_files || paths
-      
+      @files_to_rerun = []
+
+      if failed_files && failed_files.empty?
+        run_all if !paths.empty? && @options[:all_after_passed]
+      else
+        UI.info("Failed files: #{failed_files}")
+        @files_to_rerun = failed_files || paths
+      end
+
       failed_files && @files_to_rerun.empty?
     end
 

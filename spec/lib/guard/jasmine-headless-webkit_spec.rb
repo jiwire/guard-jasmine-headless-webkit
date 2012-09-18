@@ -195,7 +195,7 @@ describe Guard::JasmineHeadlessWebkit do
 
     context 'with succeeding command' do
       before do
-        Guard::JasmineHeadlessWebkit::Runner.expects(:run).once
+        Guard::JasmineHeadlessWebkit::Runner.expects(:run).once.returns([])
         Guard::UI.expects(:info).with(regexp_matches(/true/))
         Guard::UI.expects(:info).with(regexp_matches(/running all/))
       end
